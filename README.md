@@ -80,10 +80,12 @@ hugo server        # → http://localhost:1313/insight/
 - 즉시조치·백로그는 자동 만료 없음 — 사람이 처리 여부를 결정
 
 **수집 일시중지/재개** (휴가, 소스 점검 등)
-```bash
-./pipeline/pause.sh    # cron의 수집·판정만 중지 (완료 처리 푸시 배포는 계속 동작)
-./pipeline/resume.sh   # 재개
-```
+- 웹/모바일: Actions 탭 → **Pipeline Control** → Run workflow → pause / resume / status 선택
+- 터미널:
+  ```bash
+  ./pipeline/pause.sh    # cron의 수집·판정만 중지 (완료 처리 푸시 배포는 계속 동작)
+  ./pipeline/resume.sh   # 재개
+  ```
 
 **매주 금요일 (15분)**
 1. 백로그/학습 중 처리한 항목 완료 처리:

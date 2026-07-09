@@ -1,0 +1,44 @@
+name: Pipeline Control
+
+# 웹(Actions 탭)에서 수집 일시중지/재개:
+# Actions → Pipeline Control → Run workflow → action 선택
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "수집 제어"
+        required: true
+        type: choice
+        options:
+          - pause
+          - resume
+          - status
+
+permissions:
+  actions: write
+
+jobs:
+  control:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Apply
+        run: |
+          case "${{ inputs.action }}" in
+            pause)
+              gh variable set COLLECT_PAUSED --repo "${{ github.repository }}" --body "true"
+              echo "### ⏸️ 수집 일시중지됨" >> "$GITHUB_STEP_SUMMARY"
+              echo "- 매일 아침 cron: 수집·판정 스킵" >> "$GITHUB_STEP_SUMMARY"
+              echo "- 완료 처리 푸시 배포: 정상 동작" >> "$GITHUB_STEP_SUMMARY"
+              ;;
+            resume)
+              gh variable set COLLECT_PAUSED --repo "${{ github.repository }}" --body "false"
+              echo "### ▶️ 수집 재개됨 — 다음 아침 cron부터 정상 수집" >> "$GITHUB_STEP_SUMMARY"
+              ;;
+            status)
+              v=$(gh variable get COLLECT_PAUSED --repo "${{ github.repository }}" 2>/dev/null || echo "(미설정=동작중)")
+              if [ "$v" = "true" ]; then s="⏸️ 일시중지 상태"; else s="▶️ 수집 동작 중"; fi
+              echo "### $s (COLLECT_PAUSED=$v)" >> "$GITHUB_STEP_SUMMARY"
+              ;;
+          esac
