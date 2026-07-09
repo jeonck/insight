@@ -234,8 +234,9 @@ class FatalAPIError(Exception):
 def is_fatal_api_error(exc: Exception) -> bool:
     msg = str(exc).lower()
     return any(marker in msg for marker in (
-        "credit balance", "authentication", "invalid x-api-key",
-        "invalid api key", "oauth token", "/login",
+        "credit balance", "authenticat", "invalid x-api-key",
+        "invalid api key", "invalid bearer token", "oauth token", "/login",
+        "401",
     ))
 
 
