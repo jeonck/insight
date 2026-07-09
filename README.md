@@ -27,6 +27,7 @@ Claude API가 [context.md](context.md)(내 기술 스택/환경) 기준으로 **
 │   ├── collect.py              # 수집 → 판정 → 포스트 생성
 │   ├── requirements.txt
 │   ├── processed.json          # 처리한 URL 해시 기록 (중복 방지, 90일 보존)
+│   ├── expire.py               # 학습 항목 14일 경과 시 자동 완료 (EXPIRE_DAYS로 조정)
 │   └── done.sh                 # 주간 리뷰: status 대기 → 완료
 ├── content/insights/           # 생성된 포스트
 ├── layouts/                    # 자체 Hugo 레이아웃 (외부 테마 없음)
@@ -73,6 +74,10 @@ hugo server        # → http://localhost:1313/insight/
 **매일 아침 (2분)**
 1. 사이트 접속 → 🔥 즉시조치 · 대기 확인 → 있으면 액션 항목 그대로 실행
 2. 📌 백로그는 눈으로만 훑기
+
+**자동 정리**
+- 학습 항목은 14일이 지나면 자동으로 완료 처리됨 (매일 아침 실행, `EXPIRE_DAYS`로 조정)
+- 즉시조치·백로그는 자동 만료 없음 — 사람이 처리 여부를 결정
 
 **매주 금요일 (15분)**
 1. 백로그/학습 중 처리한 항목 완료 처리:

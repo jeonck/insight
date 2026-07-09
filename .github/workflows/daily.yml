@@ -55,6 +55,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python pipeline/collect.py
 
+      - name: Expire stale study items
+        run: python pipeline/expire.py
+
       - name: Commit new insights
         id: commit
         run: |
