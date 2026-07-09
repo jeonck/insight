@@ -24,7 +24,8 @@ concurrency:
 jobs:
   collect:
     # push 이벤트는 배포 전용 — 수집·판정 스킵
-    if: github.event_name != 'push'
+    # COLLECT_PAUSED=true (repo variable)면 수집 일시중지 (pipeline/pause.sh / resume.sh)
+    if: github.event_name != 'push' && vars.COLLECT_PAUSED != 'true'
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.commit.outputs.changed }}
