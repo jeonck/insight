@@ -8,10 +8,14 @@ Usage:
     python pipeline/collect.py [--dry-run]
 
 Env:
-    ANTHROPIC_API_KEY   필수
-    CLAUDE_MODEL        판정 모델 (기본 claude-sonnet-4-6)
-    MAX_ITEMS           1회 실행당 판정 최대 건수 (기본 30)
-    GITHUB_TOKEN        선택 — GitHub Search API rate limit 완화
+    JUDGE_BACKEND            "claude-code" | "api" (기본: 자동 — claude CLI가 있으면
+                             claude-code, 없으면 api)
+    CLAUDE_CODE_OAUTH_TOKEN  claude-code 백엔드 CI 인증 (claude setup-token으로 발급,
+                             로컬은 claude 로그인 세션 사용)
+    ANTHROPIC_API_KEY        api 백엔드 필수
+    CLAUDE_MODEL             판정 모델 (기본 claude-sonnet-4-6)
+    MAX_ITEMS                1회 실행당 판정 최대 건수 (기본 30)
+    GITHUB_TOKEN             선택 — GitHub Search API rate limit 완화
 """
 
 import argparse
@@ -19,6 +23,8 @@ import hashlib
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
 import time
 from datetime import datetime, timedelta, timezone
@@ -227,7 +233,10 @@ class FatalAPIError(Exception):
 
 def is_fatal_api_error(exc: Exception) -> bool:
     msg = str(exc).lower()
-    return "credit balance" in msg or "authentication" in msg or "invalid x-api-key" in msg
+    return any(marker in msg for marker in (
+        "credit balance", "authentication", "invalid x-api-key",
+        "invalid api key", "oauth token", "/login",
+    ))
 
 
 def parse_judgment(text: str) -> dict | None:
@@ -252,13 +261,17 @@ def parse_judgment(text: str) -> dict | None:
     return data
 
 
-def judge_item(client, model: str, system_blocks: list, item: dict) -> dict | None:
-    prompt = JUDGE_PROMPT.format(
+def build_prompt(item: dict) -> str:
+    return JUDGE_PROMPT.format(
         title=item["title"],
         source_name=item["source_name"],
         url=item["url"],
         summary=item["summary"] or "(요약 없음 — 제목으로 판단)",
     )
+
+
+def judge_item_api(client, model: str, system_blocks: list, item: dict) -> dict | None:
+    prompt = build_prompt(item)
     for attempt in (1, 2):  # JSON 파싱 실패 시 1회 재시도
         try:
             response = client.messages.create(
@@ -280,6 +293,36 @@ def judge_item(client, model: str, system_blocks: list, item: dict) -> dict | No
         if judgment:
             return judgment
         log(f"    JSON 파싱 실패 (시도 {attempt}): {text[:120]!r}")
+    return None
+
+
+def judge_item_cli(model: str, system_text: str, item: dict) -> dict | None:
+    """Claude Code CLI(claude -p)로 판정 — API 크레딧 대신 구독 인증 사용."""
+    prompt = build_prompt(item)
+    env = os.environ.copy()
+    env.pop("ANTHROPIC_API_KEY", None)  # CLI가 API 키 과금으로 빠지지 않도록
+    cmd = ["claude", "-p", "--model", model, "--tools", "",
+           "--output-format", "text", "--append-system-prompt", system_text]
+    for attempt in (1, 2):
+        try:
+            result = subprocess.run(cmd, input=prompt, env=env, timeout=180,
+                                    capture_output=True, text=True)
+        except subprocess.TimeoutExpired:
+            log(f"    CLI 타임아웃 (시도 {attempt})")
+            continue
+        if result.returncode != 0:
+            err = (result.stderr or result.stdout).strip()
+            if is_fatal_api_error(RuntimeError(err)):
+                raise FatalAPIError(err[:300])
+            log(f"    CLI 오류 (시도 {attempt}): {err[:200]}")
+            if attempt == 2:
+                return None
+            time.sleep(3)
+            continue
+        judgment = parse_judgment(result.stdout)
+        if judgment:
+            return judgment
+        log(f"    JSON 파싱 실패 (시도 {attempt}): {result.stdout[:120]!r}")
     return None
 
 
@@ -339,25 +382,42 @@ def main() -> int:
                         help="1회 실행당 판정 최대 건수")
     args = parser.parse_args()
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        log("오류: ANTHROPIC_API_KEY 환경변수가 필요합니다")
-        return 1
+    # 판정 백엔드: claude-code(구독 인증, 기본) 또는 api(ANTHROPIC_API_KEY 과금)
+    backend = os.environ.get("JUDGE_BACKEND", "").strip() or (
+        "claude-code" if shutil.which("claude") else "api"
+    )
+    client = None
+    if backend == "api":
+        if not os.environ.get("ANTHROPIC_API_KEY"):
+            log("오류: api 백엔드에는 ANTHROPIC_API_KEY 환경변수가 필요합니다")
+            return 1
+        import anthropic  # 지연 임포트 — claude-code 백엔드에서는 불필요
 
-    import anthropic  # 지연 임포트 — 수집만 테스트할 때 의존성 부담 줄임
+        client = anthropic.Anthropic()
+    elif backend == "claude-code":
+        if not shutil.which("claude"):
+            log("오류: claude-code 백엔드에는 claude CLI가 PATH에 있어야 합니다")
+            return 1
+    else:
+        log(f"오류: 알 수 없는 JUDGE_BACKEND={backend!r} (claude-code | api)")
+        return 1
 
     model = os.environ.get("CLAUDE_MODEL", "claude-sonnet-4-6")
     feeds = yaml.safe_load(FEEDS_FILE.read_text(encoding="utf-8"))
     context_md = CONTEXT_FILE.read_text(encoding="utf-8")
 
-    # context.md는 모든 판정 호출에서 동일 → prompt cache로 비용 절감
+    system_text = (
+        "당신은 아래 환경 컨텍스트를 기준으로 기술 뉴스의 실행 가치를 판정하는 DevSecOps 어시스턴트다.\n\n"
+        + context_md
+    )
+    # api 백엔드: context.md는 모든 호출에서 동일 → prompt cache로 비용 절감
     system_blocks = [{
         "type": "text",
-        "text": "당신은 아래 환경 컨텍스트를 기준으로 기술 뉴스의 실행 가치를 판정하는 DevSecOps 어시스턴트다.\n\n"
-                + context_md,
+        "text": system_text,
         "cache_control": {"type": "ephemeral"},
     }]
 
-    log(f"=== 수집 시작 (model={model}, max_items={args.max_items}, dry_run={args.dry_run}) ===")
+    log(f"=== 수집 시작 (backend={backend}, model={model}, max_items={args.max_items}, dry_run={args.dry_run}) ===")
     collected = []
     collected += collect_rss(feeds.get("rss", []))
     collected += collect_reddit(feeds.get("reddit", []))
@@ -381,7 +441,6 @@ def main() -> int:
 
     log(f"\n수집 {len(collected)}건 / 중복 제거 후 {len(unique)}건 / 신규 {len(fresh)}건 / 판정 대상 {len(queue)}건\n")
 
-    client = anthropic.Anthropic()
     now = datetime.now(timezone.utc).astimezone()  # 로컬(러너) 타임존 ISO
     verdict_counts = {v: 0 for v in VERDICTS}
     skipped = 0
@@ -391,7 +450,10 @@ def main() -> int:
     for i, item in enumerate(queue, 1):
         log(f"[{i}/{len(queue)}] {item['source_name']} | {item['title'][:80]}")
         try:
-            judgment = judge_item(client, model, system_blocks, item)
+            if backend == "claude-code":
+                judgment = judge_item_cli(model, system_text, item)
+            else:
+                judgment = judge_item_api(client, model, system_blocks, item)
         except FatalAPIError as exc:
             fatal_error = exc
             break

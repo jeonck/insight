@@ -31,11 +31,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r pipeline/requirements.txt
 
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
       - name: Collect & judge
         id: judge
         # 치명 오류(크레딧 부족 등)로 중단돼도 그 전까지의 성공분은 커밋되도록
         continue-on-error: true
         env:
+          # CLAUDE_CODE_OAUTH_TOKEN 등록 시 구독 인증(claude-code), 없으면 API 키 과금(api)
+          JUDGE_BACKEND: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' && 'claude-code' || 'api' }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python pipeline/collect.py

@@ -36,9 +36,12 @@ Claude API가 [context.md](context.md)(내 기술 스택/환경) 기준으로 **
 
 ## 최초 세팅
 
-1. **Secrets 등록** — repo Settings → Secrets and variables → Actions → New repository secret
-   - `ANTHROPIC_API_KEY`: Claude API 키 (⚠️ 계정에 크레딧이 있어야 판정이 동작함 —
-     크레딧 부족 시 해당 항목은 스킵되고 다음 실행에서 재시도됨)
+1. **판정 인증 등록** — 둘 중 하나 (repo Settings → Secrets and variables → Actions)
+   - **권장: Claude 구독 (Pro/Max)** — 로컬에서 `claude setup-token` 실행 → 브라우저 인증 →
+     출력된 토큰을 `CLAUDE_CODE_OAUTH_TOKEN` Secret으로 등록.
+     API 크레딧 불필요, 구독 사용량으로 차감됨.
+   - **대안: Claude API 키** — `ANTHROPIC_API_KEY` Secret 등록 (계정에 크레딧 필요).
+     `CLAUDE_CODE_OAUTH_TOKEN`이 없을 때만 사용됨.
 2. **Pages 활성화** — Settings → Pages → Source: **GitHub Actions**
 3. **첫 실행** — Actions 탭 → `Daily Insights` → Run workflow (수동 실행은 신규 항목이 없어도 배포함)
 
@@ -48,8 +51,8 @@ Claude API가 [context.md](context.md)(내 기술 스택/환경) 기준으로 **
 
 ```bash
 pip install -r pipeline/requirements.txt
-export ANTHROPIC_API_KEY=sk-ant-...
 
+# claude CLI가 로그인돼 있으면 그대로 동작 (구독 인증, API 키 불필요)
 # dry-run: 파일 생성/기록 갱신 없이 판정 결과만 stdout 출력
 python pipeline/collect.py --dry-run
 
@@ -61,7 +64,9 @@ python pipeline/collect.py
 hugo server        # → http://localhost:1313/insight/
 ```
 
-환경변수: `CLAUDE_MODEL`(기본 `claude-sonnet-4-6`), `MAX_ITEMS`(기본 30), `GITHUB_TOKEN`(선택, rate limit 완화)
+환경변수:
+- `JUDGE_BACKEND`: `claude-code`(구독, 기본 — claude CLI가 PATH에 있을 때) | `api`(API 키 과금)
+- `CLAUDE_MODEL`(기본 `claude-sonnet-4-6`), `MAX_ITEMS`(기본 30), `GITHUB_TOKEN`(선택, rate limit 완화)
 
 ## 운영 루틴
 
@@ -82,8 +87,9 @@ hugo server        # → http://localhost:1313/insight/
 ## 비용
 
 - 항목당 1회 Claude 호출 (입력 ~2K 토큰 · 출력 ~200 토큰), 실행당 최대 `MAX_ITEMS`(30)건
-- context.md는 prompt cache 처리되어 두 번째 호출부터 입력 비용 ~90% 절감
-- 대략: 일 30건 × sonnet 기준 ≈ $0.05~0.1/일
+- **claude-code 백엔드(기본)**: 별도 과금 없음 — Claude 구독(Pro/Max) 사용량으로 차감.
+  판정 1건당 ~10초, 30건 ≈ 5분
+- **api 백엔드**: context.md prompt cache 적용, 일 30건 × sonnet 기준 ≈ $0.05~0.1/일
 
 ## 알려진 제약
 
@@ -92,4 +98,5 @@ hugo server        # → http://localhost:1313/insight/
 - **hnrss.org**: 간헐적 502 — 해당 실행만 0건, 다음 실행에서 자동 회복.
 - **GitHub Search**: `created:>N일` + 스타 조건이라 결과가 0건인 날이 흔함 (정상).
 - **크레딧 부족/인증 오류**: 즉시 중단하고 워크플로를 실패로 표시함 (의도된 동작 —
-  Actions 실패 알림으로 인지). 크레딧 충전 후 다음 실행에서 미처리 항목 자동 재시도.
+  Actions 실패 알림으로 인지). 인증 복구 후 다음 실행에서 미처리 항목 자동 재시도.
+- **OAuth 토큰 만료**: `claude setup-token`으로 재발급 후 Secret 갱신.
