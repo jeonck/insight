@@ -221,6 +221,15 @@ def interleave_by_source(items: list) -> list:
 
 # ------------------------------------------------------------------ judgment
 
+class FatalAPIError(Exception):
+    """재시도가 무의미한 오류(크레딧 부족, 인증 실패) — 실행 전체 중단."""
+
+
+def is_fatal_api_error(exc: Exception) -> bool:
+    msg = str(exc).lower()
+    return "credit balance" in msg or "authentication" in msg or "invalid x-api-key" in msg
+
+
 def parse_judgment(text: str) -> dict | None:
     """모델 응답에서 JSON을 추출·검증. 실패 시 None."""
     match = re.search(r"\{.*\}", text, re.DOTALL)
@@ -259,6 +268,8 @@ def judge_item(client, model: str, system_blocks: list, item: dict) -> dict | No
                 messages=[{"role": "user", "content": prompt}],
             )
         except Exception as exc:  # noqa: BLE001
+            if is_fatal_api_error(exc):
+                raise FatalAPIError(str(exc)) from exc
             log(f"    API 오류 (시도 {attempt}): {exc}")
             if attempt == 2:
                 return None
@@ -376,9 +387,14 @@ def main() -> int:
     skipped = 0
     created_files = []
 
+    fatal_error = None
     for i, item in enumerate(queue, 1):
         log(f"[{i}/{len(queue)}] {item['source_name']} | {item['title'][:80]}")
-        judgment = judge_item(client, model, system_blocks, item)
+        try:
+            judgment = judge_item(client, model, system_blocks, item)
+        except FatalAPIError as exc:
+            fatal_error = exc
+            break
         if judgment is None:
             skipped += 1
             log("    → 스킵 (판정 실패)")
@@ -402,7 +418,8 @@ def main() -> int:
         )
 
     log("\n=== 실행 결과 요약 ===")
-    log(f"수집: {len(collected)}건 / 신규: {len(fresh)}건 / 판정: {len(queue) - skipped}건 (실패 스킵 {skipped}건)")
+    judged = sum(verdict_counts.values())
+    log(f"수집: {len(collected)}건 / 신규: {len(fresh)}건 / 판정: {judged}건 (실패 스킵 {skipped}건)")
     log("판정 분포: " + " / ".join(f"{v} {c}" for v, c in verdict_counts.items()))
     if args.dry_run:
         log("(dry-run — 파일 생성/기록 갱신 없음)")
@@ -412,6 +429,11 @@ def main() -> int:
             log(f"  - {f.relative_to(ROOT)}")
     else:
         log("생성 파일 없음")
+
+    if fatal_error:
+        log(f"\n중단: 복구 불가능한 API 오류 — {fatal_error}")
+        log("→ Anthropic 크레딧/API 키를 확인하세요. 미처리 항목은 다음 실행에서 재시도됩니다.")
+        return 1
     return 0
 
 
