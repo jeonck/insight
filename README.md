@@ -79,6 +79,7 @@ hugo server        # → http://localhost:1313/insight/
    ```bash
    ./pipeline/done.sh content/insights/2026-07-09-some-post.md
    git commit -am "review: weekly done" && git push
+   # push 시 배포 전용 워크플로가 돌아 1~2분 내 사이트 반영됨
    ```
 2. 판정 품질이 어긋나면 **context.md를 수정** (스택 변경, 관심 분야 추가/삭제, 명시적 제외 보강)
    — 다음 실행부터 반영됨

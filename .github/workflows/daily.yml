@@ -4,6 +4,13 @@ on:
   schedule:
     - cron: "0 22 * * *" # UTC 22:00 = KST 07:00
   workflow_dispatch:
+  push: # 완료 처리 등 사이트 변경 푸시 시 배포만 즉시 수행 (수집·판정은 스킵)
+    branches: [main]
+    paths:
+      - "content/**"
+      - "layouts/**"
+      - "archetypes/**"
+      - "hugo.toml"
 
 permissions:
   contents: write
@@ -16,6 +23,8 @@ concurrency:
 
 jobs:
   collect:
+    # push 이벤트는 배포 전용 — 수집·판정 스킵
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.commit.outputs.changed }}
@@ -69,8 +78,8 @@ jobs:
 
   deploy:
     needs: collect
-    # 신규 항목이 없으면 배포 스킵 (수동 실행은 항상 배포, collect 실패 시에도 커밋된 성공분은 배포)
-    if: ${{ !cancelled() && (needs.collect.outputs.changed == 'true' || github.event_name == 'workflow_dispatch') }}
+    # 스케줄: 신규 항목 있을 때만 / 수동·push: 항상 배포 (collect 실패·스킵 시에도 동작)
+    if: ${{ !cancelled() && (needs.collect.outputs.changed == 'true' || github.event_name == 'workflow_dispatch' || github.event_name == 'push') }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
