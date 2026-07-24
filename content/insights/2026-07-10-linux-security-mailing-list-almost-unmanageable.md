@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-security", "open-source", "bug-hunting"]
 source: "https://www.theregister.com/security/2026/05/18/linus-torvalds-says-ai-powered-bug-hunters-have-made-linux-security-mailing-list-almost-entirely-unmanageable/5241633"
 source_name: "HN (security)"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 기반 버그 헌팅이 오픈소스 보안 프로세스에 미치는 영향 — AI를 활용한 보안 자동화 동향에 해당
 - **액션:** 기사 및 HN 댓글 스레드 읽고 AI 버그 헌팅 노이즈 대응 사례(Linux 커뮤니티 접근법) 팀 내 공유 메모 작성
