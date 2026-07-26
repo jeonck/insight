@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["llm-inference", "vllm", "gpu-optimization"]
 source: "https://blog.kog.ai/real-time-llm-inference-on-standard-gpus-3-000-tokens-s-per-request/"
 source_name: "HN (llm)"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 사내 vLLM 서빙 운영 중으로 LLM 추론 성능 최적화 기법은 관심 분야에 해당
 - **액션:** 블로그 원문 읽고 speculative decoding/batching 기법 중 vLLM 설정에 적용 가능한 항목 메모
