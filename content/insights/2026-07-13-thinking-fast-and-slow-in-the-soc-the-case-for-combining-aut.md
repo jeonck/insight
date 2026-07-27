@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-security-automation", "soc-architecture", "llm-agent"]
 source: "https://thehackernews.com/2026/07/thinking-fast-and-slow-in-soc-case-for.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 에이전트를 SOC 자동화에 활용하는 아키텍처 설계 — AI를 활용한 보안 자동화(탐지/대응) 관심 분야에 해당
 - **액션:** 본문 전체 읽고 Autonomous AI + Analyst Copilot 이중 구조가 사내 vLLM 기반 보안 자동화 설계에 적용 가능한지 메모 정리
