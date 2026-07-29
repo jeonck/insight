@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["prompt-injection", "llm-security", "data-exfiltration"]
 source: "https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/#atom-everything"
 source_name: "Simon Willison"
-status: "대기"
+status: "완료"
 ---
 - **근거:** Claude API 사용 환경에서의 prompt injection → 데이터 유출 공격 체인 분석 — AI/LLM 보안 관심 분야(prompt injection, RAG 데이터 유출)에 해당
 - **액션:** 사내 vLLM/Claude 연동 에이전트에서 외부 URL fetch 기능 사용 여부 확인 후, 허용 URL 화이트리스트 및 응답 내 링크 자동 추적 차단 정책 검토

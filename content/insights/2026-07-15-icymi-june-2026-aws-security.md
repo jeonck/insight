@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["aws-security", "iam", "threat-intelligence"]
 source: "https://aws.amazon.com/blogs/security/icymi-june-2026-aws-security/"
 source_name: "AWS Security Blog"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AWS 운영 환경에서 IAM, 위협 인텔리전스, 네트워크 보안 등 관련 업데이트 포함
 - **액션:** 포스트 본문에서 IAM 권한 상승 또는 EKS 관련 변경 사항 있는지 확인 후 적용 여부 판단
