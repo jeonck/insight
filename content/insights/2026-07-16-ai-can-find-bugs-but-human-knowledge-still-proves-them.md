@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-security", "offensive-security", "vulnerability-research"]
 source: "https://thehackernews.com/2026/07/ai-can-find-bugs-but-human-knowledge.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI를 활용한 보안 자동화(취약점 탐지/검증) 동향 — 관심 분야 'AI를 활용한 보안 자동화' 해당
 - **액션:** 기사 전문 읽고 AI 보조 취약점 탐지 워크플로우에서 인간 검증 단계 설계 방식 메모 정리
