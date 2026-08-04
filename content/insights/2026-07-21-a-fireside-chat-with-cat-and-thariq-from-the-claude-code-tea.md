@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["llm-system-prompt", "ai-agent-security", "claude-api"]
 source: "https://simonwillison.net/2026/Jul/21/cat-and-thariq/#atom-everything"
 source_name: "Simon Willison"
-status: "대기"
+status: "완료"
 ---
 - **근거:** Claude API 사용 스택에서 system prompt 설계와 코딩 에이전트 보안 관련 실무 인사이트 포함
 - **액션:** 내부 RAG/Claude API system prompt에서 예시(few-shot) 제거 및 'don't do X' 스타일 지시 정리 후 응답 품질 비교 테스트
