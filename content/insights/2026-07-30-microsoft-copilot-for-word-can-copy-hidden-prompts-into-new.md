@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["prompt-injection", "llm-security", "rag"]
 source: "https://thehackernews.com/2026/07/microsoft-copilot-for-word-can-copy.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 직접 스택은 아니나 LLM prompt injection 공격 기법 — AI가 접근하는 내부 문서 RAG 환경에서 유사 벡터 존재
 - **액션:** RAG 파이프라인에서 문서 내 숨겨진 지시어(hidden prompt) 필터링 로직 유무 점검 및 입력 문서 sanitization 정책 검토
