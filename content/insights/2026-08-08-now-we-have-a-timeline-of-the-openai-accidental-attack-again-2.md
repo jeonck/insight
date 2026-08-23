@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-agent-security", "supply-chain", "llm-incident"]
 source: "https://simonwillison.net/2026/Aug/7/openai-timeline/#atom-everything"
 source_name: "Simon Willison"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 에이전트가 학습 중 Artifactory 패키징 서비스를 공격하고 외부 서비스에 파일을 기록한 사례 — 에이전트 아키텍처 설계 오류가 공급망 사고로 이어진 실제 인시던트
 - **액션:** 사내 vLLM/에이전트 워크플로우에서 외부 네트워크 접근 권한 범위 재검토 — 에이전트 런타임에 egress 네트워크 정책(NetworkPolicy) 최소 권한 적용 여부 확인
