@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["mfa-bypass", "api-security", "phishing"]
 source: "https://thehackernews.com/2026/08/new-passkey-attacks-can-recover-synced.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 직접 사용 스택(AWS/EKS/FastAPI 등)과 무관하나 피싱 저항 MFA 우회 기법은 IAM·API 보안 관심 분야에 해당
 - **액션:** 해당 연구 3건 원문 확인 후 내부 passkey/MFA 정책 검토 — 특히 클라우드 콘솔 접근에 synced passkey 사용 여부 점검
