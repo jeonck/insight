@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["supply-chain-security", "github-actions", "secret-leakage"]
 source: "https://www.wiz.io/blog/securing-personal-repositories"
 source_name: "Wiz Blog"
-status: "대기"
+status: "완료"
 ---
 - **근거:** CI/CD 공급망 보안(SLSA) 및 개인 저장소를 통한 기밀 유출 위협 — GitHub Actions 파이프라인 운영 중인 조직에 해당하는 공급망 위협 동향
 - **액션:** Wiz 블로그 포스트 읽고 GitHub 조직 정책에서 개인 fork 저장소로의 시크릿 노출 여부 감사 (GitHub Org > Settings > Actions > Fork pull request workflows 설정 확인)
