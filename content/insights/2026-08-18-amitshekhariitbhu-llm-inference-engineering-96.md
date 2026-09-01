@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["vllm", "llm-inference", "ai-serving"]
 source: "https://github.com/amitshekhariitbhu/llm-inference-engineering"
 source_name: "GitHub Trending"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 사내 vLLM 서빙 운영 중이며, KV cache·PagedAttention·continuous batching 등 vLLM 내부 원리 학습에 직접 관련
 - **액션:** README 및 주요 챕터(vLLM, PagedAttention) 읽고 현재 vLLM 서빙 설정(max_num_seqs, gpu_memory_utilization 등) 최적화 포인트 메모
