@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["github-actions-injection", "ai-assisted-review", "cicd-supply-chain"]
 source: "https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug"
 source_name: "Wiz Blog"
-status: "대기"
+status: "완료"
 ---
 - **근거:** GitHub Actions 공급망 보안 및 AI 보조 코드 리뷰의 취약점 — CI/CD 파이프라인 보안 관심 분야에 해당
 - **액션:** GitHub Actions 워크플로우에서 pull_request_target + 외부 입력 조합 패턴 점검: grep -r 'pull_request_target' .github/workflows/ 로 injection 가능 지점 확인
