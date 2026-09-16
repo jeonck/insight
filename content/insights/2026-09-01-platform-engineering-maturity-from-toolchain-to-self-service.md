@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["platform-engineering", "self-service", "devops"]
 source: "https://www.cncf.io/blog/2026/09/01/platform-engineering-maturity-from-toolchain-to-self-service/"
 source_name: "CNCF Blog"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 직접 스택 이슈는 아니나 관심 분야 '플랫폼 엔지니어링, GitOps 패턴' 에 해당
 - **액션:** 글 읽고 현재 내부 플랫폼 성숙도 단계 파악 후 셀프서비스 개선 가능 항목 1개 백로그에 추가
