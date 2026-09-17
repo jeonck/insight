@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-agent", "continual-learning", "rag"]
 source: "https://github.com/Human-Agent-Society/reef"
 source_name: "GitHub Trending"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 에이전트 아키텍처 관심 분야 — self-improving agent 인프라는 사내 vLLM/에이전트 설계 참고 대상
 - **액션:** reef README와 아키텍처 문서를 읽고 continual learning 패턴이 내부 RAG/에이전트 구조에 적용 가능한지 메모 작성

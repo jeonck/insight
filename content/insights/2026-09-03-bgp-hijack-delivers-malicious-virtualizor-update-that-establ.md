@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["supply-chain", "bgp-hijack", "update-tampering"]
 source: "https://thehackernews.com/2026/09/bgp-hijack-delivers-malicious.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** Virtualizor/Softaculous는 사용 스택 외이나, BGP 하이재킹을 통한 소프트웨어 업데이트 공급망 침해 사례로 '공급망 공격 TTP' 관심 분야에 해당
 - **액션:** 사내 패키지 업데이트 채널(PyPI, npm, Helm repo)의 TLS pinning 및 서명 검증 현황 점검 — Trivy SBOM 결과와 연계해 업데이트 출처 무결성 확인 절차 문서화
