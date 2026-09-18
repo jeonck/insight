@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-agent", "hallucination", "mcp"]
 source: "https://github.com/2akouwu/reverify"
 source_name: "GitHub Trending"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 에이전트 환각 방지 및 MCP 기반 검증 아키텍처 — RAG/에이전트 신뢰성 관심 분야 해당
 - **액션:** reverify 레포 README와 MCP server 구현 훑어보며 내부 vLLM 에이전트에 deterministic verification 레이어 적용 가능성 메모 작성
