@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-security", "security-automation", "devsecops"]
 source: "https://aws.amazon.com/blogs/security/the-state-of-ai-for-security-measuring-what-matters-most-for-building-trust/"
 source_name: "AWS Security Blog"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI를 활용한 보안 자동화(탐지/대응) 관심 분야에 해당하며, AWS 환경에서의 AI 보안 활용 동향
 - **액션:** 글에서 언급된 취약점 트리아지·IR 자동화 지표(false positive율, MTTD 등)를 현재 Prometheus 알림 기준 개선에 참고할 수 있는지 검토
