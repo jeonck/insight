@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["llm-security", "model-supply-chain", "ai-transparency"]
 source: "https://thehackernews.com/2026/09/openai-reveals-six-model-incidents.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 모델 공급망 신뢰성 및 모델 오정렬(misalignment) 사례 — LLM 보안 관심 분야에 해당
 - **액션:** OpenAI 공개 보고서 읽고 자사 vLLM 서빙 및 Claude API 사용 환경에서 유사 이상 행동 모니터링 항목 체크리스트 초안 작성
