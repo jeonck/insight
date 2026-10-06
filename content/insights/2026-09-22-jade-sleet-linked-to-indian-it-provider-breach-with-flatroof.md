@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["supply-chain-attack", "threat-intel", "north-korea-apt"]
 source: "https://thehackernews.com/2026/09/jade-sleet-linked-to-indian-it-provider.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 공급망 공격 TTP — 개발자 타겟 침해 사례로 관심 분야 '공급망 공격' 해당
 - **액션:** FLATROOF/ROOFDECK IoC(해시·도메인)를 SentinelOne 원문에서 추출해 팀 내 위협 인텔 채널에 공유
