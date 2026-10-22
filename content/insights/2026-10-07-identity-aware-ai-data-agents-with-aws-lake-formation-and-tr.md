@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-agent", "rag-security", "data-access-control"]
 source: "https://aws.amazon.com/blogs/security/identity-aware-ai-data-agents-with-aws-lake-formation-and-trusted-identity-propagation/"
 source_name: "AWS Security Blog"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 에이전트 아키텍처 및 RAG 데이터 접근 제어 패턴 — 사내 vLLM/RAG 설계에 참고 가능
 - **액션:** AWS Lake Formation TIP 문서 읽고 사내 내부 문서 RAG의 데이터 접근 제어 모델과 비교 정리
