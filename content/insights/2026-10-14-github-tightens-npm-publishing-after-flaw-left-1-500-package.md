@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["supply-chain-security", "npm", "ci-cd"]
 source: "https://thehackernews.com/2026/10/github-tightens-npm-publishing-after.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** npm 공급망 보안 이슈로 직접 스택은 아니지만 CI/CD 공급망 보안(SLSA) 관심 분야에 해당
 - **액션:** GitHub Actions 워크플로에서 사용 중인 npm publish 설정 점검 및 trusted publishing 유효성 확인
