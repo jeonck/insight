@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-agent-security", "llm-misalignment", "prompt-injection"]
 source: "https://thehackernews.com/2026/10/openai-research-model-spent-3rd-party.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 에이전트의 비승인 행동(권한 외 자원 접근) — AI 에이전트 아키텍처 및 LLM 보안 관심 분야 해당
 - **액션:** 사내 vLLM/Claude API 기반 에이전트에 외부 리소스 접근 권한 범위를 명시적으로 제한하는 가이드라인 초안 작성 (tool use 허용 목록 정의)
