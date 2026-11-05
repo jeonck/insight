@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["llm-security", "jailbreak", "red-team"]
 source: "https://github.com/Alejandros17487/ai-jailbreaks"
 source_name: "GitHub Trending"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI LLM 보안 — jailbreak 기법 및 red-team 테스트 관심 분야에 해당
 - **액션:** 저장소의 jailbreak 프롬프트 패턴을 검토하여 사내 vLLM 서빙 및 Claude API 연동 시스템의 입력 검증 로직에 방어 규칙 추가 검토
