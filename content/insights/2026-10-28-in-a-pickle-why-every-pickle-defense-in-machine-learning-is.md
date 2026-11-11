@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["model-supply-chain", "ai-security", "deserialization"]
 source: "https://webflow.sysdig.com/blog/in-a-pickle-why-every-pickle-defense-in-machine-learning-is-bypassed-the-same-way"
 source_name: "Sysdig Blog"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 사내 vLLM 서빙 및 AI 모델 공급망 위협과 관련된 ML 모델 파일 역직렬화 취약점
 - **액션:** vLLM 및 내부 모델 로딩 파이프라인에서 pickle 포맷 사용 여부 확인 후 safetensors 등 안전한 포맷으로 대체 가능한지 검토
