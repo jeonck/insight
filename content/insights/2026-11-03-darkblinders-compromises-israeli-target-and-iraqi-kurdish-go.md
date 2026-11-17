@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["cloud-compromise", "apt", "iam-privilege-escalation"]
 source: "https://thehackernews.com/2026/11/darkblinders-compromises-israeli-target.html"
 source_name: "The Hacker News"
-status: "대기"
+status: "완료"
 ---
 - **근거:** 이란 연계 APT의 정부 클라우드 침해 사례 — 클라우드 침해 사례 분석 관심 분야 해당
 - **액션:** DarkBlinders TTP(초기 접근·lateral movement·클라우드 권한 탈취 기법) 분석 보고서 읽고 AWS IAM 권한 상승 방어 체크리스트와 대조
