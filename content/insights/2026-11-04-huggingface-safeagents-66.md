@@ -5,7 +5,7 @@ verdict: "학습"
 tags: ["ai-agent-security", "llm-sandbox", "code-execution"]
 source: "https://github.com/huggingface/safeagents"
 source_name: "GitHub Trending"
-status: "대기"
+status: "완료"
 ---
 - **근거:** AI 에이전트 보안 샌드박싱 — 사내 vLLM/Claude API 기반 에이전트 아키텍처의 안전한 코드 실행 패턴 참고 가능
 - **액션:** README 및 예제 코드 검토 후 사내 AI 에이전트에 적용 가능한 샌드박스 패턴 정리
